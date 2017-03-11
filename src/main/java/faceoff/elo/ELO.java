@@ -10,6 +10,7 @@ public class ELO {
 	private double challengerE;
 
 	public static final double K = 32.0;
+	public static final double DEFAULT_SCORE = 2000.0;
 
 	public ELO(double championScore, double challengerScore) {
 		this.championScore = championScore;
