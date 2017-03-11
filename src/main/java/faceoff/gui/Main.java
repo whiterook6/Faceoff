@@ -2,25 +2,11 @@ package faceoff.gui;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
 
-	public void embiggen_file(File toEmbiggen, File destinationFile) throws IOException {
-
-		String charset = "utf-8";
-		String requestURL = "http://waifu2x.udp.jp/api";
-		MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-
-		multipart.addFormField("style", "art");
-		multipart.addFormField("noise", "1");
-		multipart.addFormField("scale", "2");
-
-		multipart.addFilePart("file", toEmbiggen);
-		multipart.finish(destinationFile);
-	}
 
 	public List<File> get_images(File directory) {
 		// array of supported extensions (use a List if you prefer)

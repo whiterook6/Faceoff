@@ -1,4 +1,4 @@
-package faceoff.gui;
+package faceoff.embiggen;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,8 +11,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MultipartUtility {
 	private final String boundary;
@@ -109,12 +107,10 @@ public class MultipartUtility {
 	/**
 	 * Completes the request and receives response from the server.
 	 *
-	 * @return a list of Strings as response in case the server returned status
-	 *         OK, otherwise an exception is thrown.
+	 * @return the response as a file
 	 * @throws IOException
 	 */
-	public List<String> finish(File output_directory) throws IOException {
-		List<String> response = new ArrayList<String>();
+	public File finish() throws IOException {
 		writer.append(LINE_FEED).flush();
 		writer.append("--" + boundary + "--").append(LINE_FEED);
 		writer.close();
@@ -127,8 +123,7 @@ public class MultipartUtility {
 			byte[] buffer = new byte[4096];
 			int n = -1;
 			
-			File outputFile = File.createTempFile("embiggened", ".png", output_directory);
-			System.out.println("Creating empty temp file at " + outputFile.getName() + ".");
+			File outputFile = File.createTempFile("embiggened", ".png");
 			OutputStream output = new FileOutputStream(outputFile);
 			while ((n = input.read(buffer)) != -1) {
 				output.write(buffer, 0, n);
@@ -136,11 +131,11 @@ public class MultipartUtility {
 			output.close();
 			input.close();
 			httpConn.disconnect();
-			System.out.println("Done writing to file.");
+
+			return outputFile;
 		} else {
 			httpConn.disconnect();
 			throw new IOException("Got non-OK status: " + status);
 		}
-		return response;
 	}
 }
