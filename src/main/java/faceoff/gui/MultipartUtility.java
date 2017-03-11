@@ -1,4 +1,4 @@
-package embiggener;
+package faceoff.gui;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,16 +1,10 @@
-package embiggener;
+package faceoff.gui;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main {
 
@@ -55,31 +49,5 @@ public class Main {
 		}
 		
 		return images;
-	}
-
-	public Main() {
-		JFrame main_window = new JFrame("Face-off");
-		main_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		main_window.setExtendedState(main_window.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		BorderLayout main_layout = new BorderLayout();
-		main_window.setLayout(main_layout);
-
-		JLabel left_label = new JLabel("Image List", JLabel.CENTER);
-		main_window.add(left_label, BorderLayout.WEST);
-
-		JLabel right_label = new JLabel("Results", JLabel.CENTER);
-		main_window.add(right_label, BorderLayout.EAST);
-
-		JLabel middle_label = new JLabel("Middle", JLabel.LEFT);
-		main_window.add(middle_label, BorderLayout.CENTER);
-
-		main_window.setVisible(true);
-
-	}
-
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		new Main();
 	}
 }

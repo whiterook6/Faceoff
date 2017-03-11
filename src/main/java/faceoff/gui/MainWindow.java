@@ -1,32 +1,31 @@
-package embiggener;
+package faceoff.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.SystemColor;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.JProgressBar;
-import javax.swing.JLabel;
-import java.awt.Component;
-import javax.swing.JScrollPane;
-import javax.swing.AbstractAction;
-import java.awt.event.ActionEvent;
-import javax.swing.Action;
-import java.awt.Dimension;
-import javax.swing.JScrollBar;
-import java.awt.SystemColor;
+import javax.swing.UIManager;
 
 public class MainWindow {
 
 	private JFrame frame_faceoff_main;
+	private JPanel left_image_panel;
+	private JPanel right_image_panel;
 
 	/**
 	 * Launch the application.
@@ -35,6 +34,7 @@ public class MainWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					MainWindow window = new MainWindow();
 					window.frame_faceoff_main.setVisible(true);
 				} catch (Exception e) {
@@ -58,9 +58,9 @@ public class MainWindow {
 		frame_faceoff_main = new JFrame();
 		frame_faceoff_main.setMinimumSize(new Dimension(1000, 500));
 		frame_faceoff_main.setTitle("Face Off");
-		frame_faceoff_main.setBounds(100, 100, 939, 502);
 		frame_faceoff_main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame_faceoff_main.getContentPane().setLayout(new BorderLayout(0, 0));
+		frame_faceoff_main.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		JPanel images_panel = new JPanel();
 		frame_faceoff_main.getContentPane().add(images_panel, BorderLayout.CENTER);
@@ -71,7 +71,7 @@ public class MainWindow {
 		gbl_images_panel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		images_panel.setLayout(gbl_images_panel);
 		
-		JPanel left_image_panel = new JPanel();
+		left_image_panel = new JPanel();
 		GridBagConstraints gbc_left_image_panel = new GridBagConstraints();
 		gbc_left_image_panel.insets = new Insets(0, 0, 0, 5);
 		gbc_left_image_panel.weightx = 1.0;
@@ -86,7 +86,7 @@ public class MainWindow {
 		lblLeftImage.setHorizontalAlignment(SwingConstants.CENTER);
 		left_image_panel.add(lblLeftImage);
 		
-		JPanel right_image_panel = new JPanel();
+		right_image_panel = new JPanel();
 		GridBagConstraints gbc_right_image_panel = new GridBagConstraints();
 		gbc_right_image_panel.weightx = 1.0;
 		gbc_right_image_panel.fill = GridBagConstraints.BOTH;
@@ -112,7 +112,7 @@ public class MainWindow {
 		
 		JButton btnNewButton = new JButton("Embiggen");
 		btnNewButton.setBackground(SystemColor.controlDkShadow);
-		btnNewButton.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Resize-16.png")));
+		btnNewButton.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(5, 5, 5, 5);
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
@@ -122,8 +122,7 @@ public class MainWindow {
 		
 		JButton btnLeftWinsa = new JButton("Left Wins (A)");
 		btnLeftWinsa.setBackground(SystemColor.controlDkShadow);
-		btnLeftWinsa.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Circled Left-16.png")));
-		btnLeftWinsa.setSelectedIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Circled Left-64.png")));
+		btnLeftWinsa.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Circled Left-16.png")));
 		GridBagConstraints gbc_btnLeftWinsa = new GridBagConstraints();
 		gbc_btnLeftWinsa.insets = new Insets(5, 0, 5, 5);
 		gbc_btnLeftWinsa.weightx = 1.0;
@@ -134,8 +133,7 @@ public class MainWindow {
 		
 		JButton btnNewButton_1 = new JButton("Delete");
 		btnNewButton_1.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_1.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Delete-16.png")));
-		btnNewButton_1.setSelectedIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Delete-64.png")));
+		btnNewButton_1.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Delete-16.png")));
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_1.insets = new Insets(5, 0, 5, 5);
@@ -154,7 +152,7 @@ public class MainWindow {
 		
 		JButton btnNewButton_3 = new JButton("Both Win (Q)");
 		btnNewButton_3.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_3.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Checked-16.png")));
+		btnNewButton_3.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Checked-16.png")));
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
 		gbc_btnNewButton_3.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_3.insets = new Insets(5, 0, 5, 5);
@@ -164,8 +162,7 @@ public class MainWindow {
 		
 		JButton btnSkip = new JButton("Skip (S)");
 		btnSkip.setBackground(SystemColor.controlDkShadow);
-		btnSkip.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Refresh-16.png")));
-		btnSkip.setSelectedIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Refresh-64.png")));
+		btnSkip.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Refresh-16.png")));
 		GridBagConstraints gbc_btnSkip = new GridBagConstraints();
 		gbc_btnSkip.insets = new Insets(5, 0, 5, 5);
 		gbc_btnSkip.fill = GridBagConstraints.BOTH;
@@ -175,7 +172,7 @@ public class MainWindow {
 		
 		JButton btnNewButton_4 = new JButton("Both Lose (E)");
 		btnNewButton_4.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_4.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Cancel-16.png")));
+		btnNewButton_4.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
 		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
 		gbc_btnNewButton_4.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton_4.insets = new Insets(5, 0, 5, 5);
@@ -194,7 +191,7 @@ public class MainWindow {
 		
 		JButton btnDeleteRight = new JButton("Delete");
 		btnDeleteRight.setBackground(SystemColor.controlDkShadow);
-		btnDeleteRight.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Delete-16.png")));
+		btnDeleteRight.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Delete-16.png")));
 		GridBagConstraints gbc_btnDeleteRight = new GridBagConstraints();
 		gbc_btnDeleteRight.fill = GridBagConstraints.BOTH;
 		gbc_btnDeleteRight.insets = new Insets(5, 0, 5, 5);
@@ -204,7 +201,7 @@ public class MainWindow {
 		
 		JButton btnRightWinsd = new JButton("Right Wins (D)");
 		btnRightWinsd.setBackground(SystemColor.controlDkShadow);
-		btnRightWinsd.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Circled Right-16.png")));
+		btnRightWinsd.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Circled Right-16.png")));
 		GridBagConstraints gbc_btnRightWinsd = new GridBagConstraints();
 		gbc_btnRightWinsd.fill = GridBagConstraints.BOTH;
 		gbc_btnRightWinsd.weightx = 1.0;
@@ -215,7 +212,7 @@ public class MainWindow {
 		
 		JButton btnEmbiggenRight = new JButton("Embiggen");
 		btnEmbiggenRight.setBackground(SystemColor.controlDkShadow);
-		btnEmbiggenRight.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Resize-16.png")));
+		btnEmbiggenRight.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnEmbiggenRight = new GridBagConstraints();
 		gbc_btnEmbiggenRight.insets = new Insets(5, 0, 5, 5);
 		gbc_btnEmbiggenRight.fill = GridBagConstraints.BOTH;
@@ -244,7 +241,7 @@ public class MainWindow {
 		
 		JButton btnReset = new JButton("Reset");
 		btnReset.setBackground(SystemColor.controlDkShadow);
-		btnReset.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Restart-16.png")));
+		btnReset.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Restart-16.png")));
 		GridBagConstraints gbc_btnReset = new GridBagConstraints();
 		gbc_btnReset.insets = new Insets(5, 5, 5, 5);
 		gbc_btnReset.gridx = 0;
@@ -264,7 +261,7 @@ public class MainWindow {
 		
 		JButton btnNewButton_2 = new JButton("Commit");
 		btnNewButton_2.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_2.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Save-16.png")));
+		btnNewButton_2.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Save-16.png")));
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
 		gbc_btnNewButton_2.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton_2.gridx = 2;
@@ -273,7 +270,7 @@ public class MainWindow {
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(SystemColor.controlDkShadow);
-		btnCancel.setIcon(new ImageIcon(MainWindow.class.getResource("/embiggener/Cancel-16.png")));
+		btnCancel.setIcon(new ImageIcon(MainWindow.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
 		gbc_btnCancel.gridx = 3;
 		gbc_btnCancel.gridy = 0;
@@ -319,6 +316,7 @@ public class MainWindow {
 		gbc_winning_images_scroll_pane.gridx = 0;
 		gbc_winning_images_scroll_pane.gridy = 0;
 		winners_panel.add(winning_images_scroll_pane, gbc_winning_images_scroll_pane);
+
 		
 		JLabel lblWinningImages = new JLabel("Winning Images");
 		lblWinningImages.setHorizontalAlignment(SwingConstants.CENTER);
@@ -327,14 +325,5 @@ public class MainWindow {
 		JPanel winning_images_panel = new JPanel();
 		winning_images_scroll_pane.setViewportView(winning_images_panel);
 		winning_images_panel.setLayout(new BoxLayout(winning_images_panel, BoxLayout.Y_AXIS));
-	}
-
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
 	}
 }
