@@ -2,10 +2,10 @@ package faceoff.elo;
 
 public class ELO {
 
-	public double championScore;
+	private double championScore;
 	private double championR;
 	private double championE;
-	public double challengerScore;
+	private double challengerScore;
 	private double challengerR;
 	private double challengerE;
 
