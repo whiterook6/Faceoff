@@ -13,16 +13,16 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+
+import org.imgscalr.Scalr;
 
 import faceoff.competition.Competition;
 import faceoff.competition.Competitor;
@@ -394,21 +394,49 @@ public class GUI {
 //		winningImagesPanel.setLayout(new BoxLayout(winningImagesPanel, BoxLayout.Y_AXIS));
 	}
 
-	public void setLeft(Competitor left) throws IOException{
-		Dimension imagesPanelSize = imagesPanel.getSize();
-		BufferedImage thumbnail = left.getThumbnail(imagesPanelSize.width / 2, imagesPanelSize.height);
-		leftImageLabel.setIcon(new ImageIcon(thumbnail));
-		System.out.println("Left image: "+left.getImage().getAbsoluteFile());
+//	public void setLeft(Competitor left) throws IOException{
+//		System.out.println("Left image: "+left.getImage().getAbsoluteFile());
+//		
+//	}
+//	
+//	public void setRight(Competitor right) throws IOException{
+//		
+//		rightImageLabel.setIcon(new ImageIcon(thumbnail));
+//		System.out.println("Right image: "+right.getImage().getAbsoluteFile());
+//	}
+	
+	public void battle(Competitor left, Competitor right) throws IOException{
+		double widthViewport = imagesPanel.getWidth(),
+			heightViewport = imagesPanel.getHeight(),
 		
+			widthLeft = left.getWidth(),
+			heightLeft = left.getHeight(),
+			
+			widthRight = right.getWidth(),
+			heightRight = right.getHeight();
+		
+		double ratioLeft = (heightRight * widthViewport) / (heightLeft * widthRight + heightRight * widthLeft),
+			ratioRight = (heightLeft * ratioLeft) / heightRight;
+		
+		ratioLeft = Math.min(ratioLeft, heightViewport / heightLeft);
+		ratioRight = Math.min(ratioRight,  heightViewport / heightRight);
+		
+		int widthLeftScaled = (int)(widthLeft * ratioLeft),
+			heightLeftScaled = (int)(heightLeft * ratioLeft),
+			
+			widthRightScaled = (int)(widthRight * ratioRight),
+			heightRightScaled = (int)(heightRight * ratioRight);
+		
+		BufferedImage leftImage = left.lazyLoadImage(),
+			rightImage = right.lazyLoadImage(),
+			
+			leftImageScaled = Scalr.resize(leftImage, widthLeftScaled, heightLeftScaled),
+			rightImageScaled = Scalr.resize(rightImage, widthRightScaled, heightRightScaled);
+
+		leftImageLabel.setIcon(new ImageIcon(leftImageScaled));
+		rightImageLabel.setIcon(new ImageIcon(rightImageScaled));
 	}
-	
-	public void setRight(Competitor right) throws IOException{
-		Dimension imagesPanelSize = imagesPanel.getSize();
-		BufferedImage thumbnail = right.getThumbnail(imagesPanelSize.width / 2, imagesPanelSize.height);
-		rightImageLabel.setIcon(new ImageIcon(thumbnail));
-		System.out.println("Right image: "+right.getImage().getAbsoluteFile());
-	}
-	
+
 	public void setMainProgress(int progress){
 		mainProgressBar.setValue(progress);
 	}

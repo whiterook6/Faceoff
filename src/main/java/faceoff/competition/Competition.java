@@ -137,31 +137,16 @@ public class Competition {
 	}
 	
 	public void fight(){
-		setLeft(queue.pop());
-		setRight(queue.pop());
+		left = queue.pop();
+		right = queue.pop();
+
+		try {
+			gui.battle(left, right);
+		} catch (IOException e) {
+			cancel();
+			return;
+		}
 		gui.setPause(false);
-	}
-	
-	public void setLeft(Competitor competitor){
-		left = competitor;
-
-		try {
-			gui.setLeft(left);
-		} catch (IOException iOE){
-			iOE.printStackTrace();
-			cancel();
-		}
-	}
-	
-	public void setRight(Competitor competitor){
-		right = competitor;
-
-		try {
-			gui.setRight(right);
-		} catch (IOException iOE){
-			iOE.printStackTrace();
-			cancel();
-		}
 	}
 	
 	public void skip(){
@@ -200,13 +185,25 @@ public class Competition {
 	
 	public void deleteLeft(){
 //		left.getImage().delete();
-		setLeft(queue.pop());
+		left = queue.pop();
+		try {
+			gui.battle(left, right);
+		} catch (IOException e) {
+			cancel();
+			return;
+		}
 		gui.setMainProgressMaximum(queue.size());
 	}
 	
 	public void deleteRight(){
 //		right.getImage().delete();
-		setRight(queue.pop());
+		right = queue.pop();
+		try {
+			gui.battle(left, right);
+		} catch (IOException e) {
+			cancel();
+			return;
+		}
 		gui.setMainProgressMaximum(queue.size());
 		debug("deleteRight");
 	}
