@@ -36,6 +36,7 @@ public class GUI {
 	private JProgressBar mainProgressBar;
 	private List<JButton> buttons;
 	private JProgressBar secondaryProgressBar;
+	private JPanel imagesPanel;
 
 	/**
 	 * Create the application.
@@ -59,7 +60,7 @@ public class GUI {
 		mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
 		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
-		JPanel imagesPanel = new JPanel();
+		imagesPanel = new JPanel();
 		mainFrame.getContentPane().add(imagesPanel, BorderLayout.CENTER);
 		GridBagLayout gblImagesPanel = new GridBagLayout();
 		gblImagesPanel.columnWidths = new int[]{0, 0, 0};
@@ -394,17 +395,18 @@ public class GUI {
 	}
 
 	public void setLeft(Competitor left) throws IOException{
-		Dimension leftImagePanelSize = leftImageLabel.getSize();
-		System.out.println(leftImagePanelSize.getWidth()+":"+leftImagePanelSize.getHeight());
-		BufferedImage thumbnail = left.getThumbnail(leftImagePanelSize.width, leftImagePanelSize.height);
+		Dimension imagesPanelSize = imagesPanel.getSize();
+		BufferedImage thumbnail = left.getThumbnail(imagesPanelSize.width / 2, imagesPanelSize.height);
 		leftImageLabel.setIcon(new ImageIcon(thumbnail));
+		System.out.println("Left image: "+left.getImage().getAbsoluteFile());
 		
 	}
 	
 	public void setRight(Competitor right) throws IOException{
-		Dimension rightImagePanelSize = rightImageLabel.getSize();
-		BufferedImage thumbnail = right.getThumbnail(rightImagePanelSize.width, rightImagePanelSize.height);
+		Dimension imagesPanelSize = imagesPanel.getSize();
+		BufferedImage thumbnail = right.getThumbnail(imagesPanelSize.width / 2, imagesPanelSize.height);
 		rightImageLabel.setIcon(new ImageIcon(thumbnail));
+		System.out.println("Right image: "+right.getImage().getAbsoluteFile());
 	}
 	
 	public void setMainProgress(int progress){
