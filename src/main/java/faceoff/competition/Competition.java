@@ -58,8 +58,14 @@ public class Competition {
 		
 		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
 			sourceDirectory = directoryChooser.getSelectedFile();
+			if (sourceDirectory == null || !sourceDirectory.isDirectory()){
+				System.out.println("Not a directory.");
+				cancel();
+				return;
+			}
 		} else {
 			cancel();
+			return;
 		}
 		
 		loadImages(sourceDirectory);
@@ -70,9 +76,14 @@ public class Competition {
 		
 		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
 			winnerDirectory = directoryChooser.getSelectedFile();
-			debug(winnerDirectory.getAbsolutePath());
+			if (winnerDirectory == null || !winnerDirectory.isDirectory()){
+				System.out.println("Not a directory.");
+				cancel();
+				return;
+			}
 		} else {
 			cancel();
+			return;
 		}
 		
 		directoryChooser=new JFileChooser("D:/");
@@ -81,9 +92,14 @@ public class Competition {
 		
 		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
 			loserDirectory = directoryChooser.getSelectedFile();
-			debug(loserDirectory.getAbsolutePath());
+			if (loserDirectory == null || !loserDirectory.isDirectory()){
+				System.out.println("Not a directory.");
+				cancel();
+				return;
+			}
 		} else {
 			cancel();
+			return;
 		}
 		
 		fight();
@@ -128,12 +144,24 @@ public class Competition {
 	
 	public void setLeft(Competitor competitor){
 		left = competitor;
-		gui.setLeft(left);
+
+		try {
+			gui.setLeft(left);
+		} catch (IOException iOE){
+			iOE.printStackTrace();
+			cancel();
+		}
 	}
 	
 	public void setRight(Competitor competitor){
 		right = competitor;
-		gui.setRight(right);
+
+		try {
+			gui.setRight(right);
+		} catch (IOException iOE){
+			iOE.printStackTrace();
+			cancel();
+		}
 	}
 	
 	public void skip(){

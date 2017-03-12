@@ -37,6 +37,8 @@ public class Competitor {
 	}
 	
 	private void loadThumbnail(int maxWidth, int maxHeight) throws IOException{
+		System.out.print("loading thumbnail...");
+		long startTime = System.currentTimeMillis();
 		BufferedImage image = ImageIO.read(file);
 		int imageWidth = image.getWidth();
 		int imageHeight= image.getHeight();
@@ -56,6 +58,8 @@ public class Competitor {
 		AffineTransform at = AffineTransform.getScaleInstance(widthRatio,heightRatio);
 		g2d.drawRenderedImage(image, at);
 		g2d.dispose();
+		long timeTaken = System.currentTimeMillis() - startTime;
+		System.out.println("... done. Time taken: "+timeTaken+"ms.");
 	}
 	
 	public BufferedImage getThumbnail(int maxWidth, int maxHeight) throws IOException{
