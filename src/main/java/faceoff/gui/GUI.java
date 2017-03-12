@@ -291,6 +291,13 @@ public class GUI {
 		gbc_btnReset.gridx = 0;
 		gbc_btnReset.gridy = 0;
 		progressPanel.add(btnReset, gbc_btnReset);
+		btnReset.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.startCompetition();
+			}
+		});
 		
 		mainProgressBar = new JProgressBar();
 		mainProgressBar.setMinimum(0);
@@ -312,6 +319,13 @@ public class GUI {
 		gbcBtnCommit.gridx = 2;
 		gbcBtnCommit.gridy = 0;
 		progressPanel.add(btnCommit, gbcBtnCommit);
+		btnCommit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.commit();
+			}
+		});
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(SystemColor.controlDkShadow);
@@ -320,6 +334,13 @@ public class GUI {
 		gbcBtnCancel.gridx = 3;
 		gbcBtnCancel.gridy = 0;
 		progressPanel.add(btnCancel, gbcBtnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.cancel();
+			}
+		});
 		
 		JPanel losersPanel = new JPanel();
 		mainFrame.getContentPane().add(losersPanel, BorderLayout.WEST);
@@ -373,11 +394,19 @@ public class GUI {
 	}
 
 	public void setLeft(Competitor left){
-		
+		System.out.println("Left: "+left.getImage().getName());
+	}
+	
+	public void setRight(Competitor right){
+		System.out.println("Right: "+right.getImage().getName());
 	}
 	
 	public void setMainProgress(int progress){
 		mainProgressBar.setValue(progress);
+	}
+	
+	public void incrementMainProgress(){
+		mainProgressBar.setValue(mainProgressBar.getValue() + 1);
 	}
 	
 	public void setMainProgressMaximum(int maximum){
@@ -389,10 +418,6 @@ public class GUI {
 		for (JButton button : buttons) {
 			button.setEnabled(!is_paused);
 		}
-	}
-	
-	public void setRight(Competitor right){
-		
 	}
 	
 	public void setSecondaryProgress(int progress){

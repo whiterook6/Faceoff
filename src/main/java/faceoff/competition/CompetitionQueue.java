@@ -34,6 +34,10 @@ public class CompetitionQueue {
 		queue.add(competitor);
 	}
 	
+	public void shuffle(){
+		Collections.shuffle(queue);
+	}
+	
 	public void insert_shuffle(Competitor competitor){
 		if (queue.isEmpty()){
 			queue.addFirst(competitor);

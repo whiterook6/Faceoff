@@ -2,11 +2,14 @@ package faceoff.competition;
 
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
+import faceoff.elo.ELO;
 import faceoff.gui.GUI;
 
 public class Competition {
@@ -46,6 +49,9 @@ public class Competition {
 	}
 	
 	public void startCompetition(){
+		queue.getQueue().clear();
+		gui.setMainProgress(0);
+
 		JFileChooser directoryChooser=new JFileChooser("D:/");
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		directoryChooser.setDialogTitle("Select a directory containing your unsorted images");
@@ -56,12 +62,15 @@ public class Competition {
 			cancel();
 		}
 		
+		loadImages(sourceDirectory);
+		
 		directoryChooser=new JFileChooser("D:/");
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		directoryChooser.setDialogTitle("Select a directory for your best images");
 		
 		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
 			winnerDirectory = directoryChooser.getSelectedFile();
+			debug(winnerDirectory.getAbsolutePath());
 		} else {
 			cancel();
 		}
@@ -72,11 +81,43 @@ public class Competition {
 		
 		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
 			loserDirectory = directoryChooser.getSelectedFile();
+			debug(loserDirectory.getAbsolutePath());
 		} else {
 			cancel();
 		}
 		
-		gui.setPause(true);
+		fight();
+	}
+	
+	protected void loadImages(File directory){
+		// array of supported extensions (use a List if you prefer)
+		final String[] EXTENSIONS = new String[] { "jpg", "png", "bmp", "jpeg" };
+
+		// filter to identify images based on their extensions
+		final FilenameFilter IMAGE_FILTER = new FilenameFilter() {
+
+			@Override
+			public boolean accept(final File dir, final String name) {
+				for (final String ext : EXTENSIONS) {
+					if (name.endsWith("." + ext)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
+
+		if (directory.isDirectory()) { // make sure it's a directory
+            for (final File image : directory.listFiles(IMAGE_FILTER)) {
+            	queue.push(new Competitor(image));
+            }
+            queue.shuffle();
+		} else {
+			debug("Not a directory");
+			cancel();
+		}
+		
+		gui.setMainProgressMaximum(queue.size());
 	}
 	
 	public void fight(){
@@ -96,54 +137,75 @@ public class Competition {
 	}
 	
 	public void skip(){
-//		queue.insert_shuffle(left); left = null;
-//		queue.insert_shuffle(right); right = null;
-//		fight();
-		debug("Skip");
+		queue.insert_shuffle(left); left = null;
+		queue.insert_shuffle(right); right = null;
+		fight();
 	}
 	
 	public void leftWins(){
-//		ELO elo = new ELO(left, right);
-//		elo.championWins();
-		debug("LeftWins");
+		ELO elo = new ELO(left, right);
+		elo.championWins();
+		gui.incrementMainProgress();
 		skip();
 	}
 	
 	public void rightWins(){
-//		ELO elo = new ELO(left, right);
-//		elo.challengerWins();
-		debug("RightWins");
+		ELO elo = new ELO(left, right);
+		elo.challengerWins();
+		gui.incrementMainProgress();
 		skip();
 	}
 	
 	public void bothWin(){
-//		ELO elo = new ELO(left, right);
-//		elo.bothWin();
-		debug("BothWin");
+		ELO elo = new ELO(left, right);
+		elo.bothWin();
+		gui.incrementMainProgress();
 		skip();
 	}
 	
 	public void bothLose(){
-//		ELO elo = new ELO(left, right);
-//		elo.bothLose();
-		debug("BothLose");
+		ELO elo = new ELO(left, right);
+		elo.bothLose();
+		gui.incrementMainProgress();
 		skip();
 	}
 	
 	public void deleteLeft(){
 //		left.getImage().delete();
-//		set_left(queue.pop());
-		debug("deleteLeft");
+		setLeft(queue.pop());
+		gui.setMainProgressMaximum(queue.size());
 	}
 	
 	public void deleteRight(){
 //		right.getImage().delete();
-//		set_right(queue.pop());
+		setRight(queue.pop());
+		gui.setMainProgressMaximum(queue.size());
 		debug("deleteRight");
 	}
 	
 	public void commit(){
+		gui.setPause(true);
+		queue.push(left);
+		queue.push(right);
+		int howMany = queue.size() / 3;
+		List<Competitor> best = queue.getBest(howMany);
+		List<Competitor> worst = queue.getWorst(howMany);
+
+		String winnerDirectoryName = winnerDirectory.getAbsolutePath()+File.separator;
+		for (Competitor competitor : best) {
+			File image = competitor.getImage();
+			String filename = image.getName();
+			image.renameTo(new File(winnerDirectoryName + filename));
+		}
+
+		String loserDirectoryName = loserDirectory.getAbsolutePath()+File.separator;
+		for (Competitor competitor : worst) {
+			File image = competitor.getImage();
+			String filename = image.getName();
+			image.renameTo(new File(loserDirectoryName + filename));
+		}
 		
+		cancel();
 	}
 	
 	public void cancel(){
