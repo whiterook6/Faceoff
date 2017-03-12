@@ -1,7 +1,6 @@
 package faceoff.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,7 +29,7 @@ import faceoff.competition.Competitor;
 public class GUI {
 
 	private final Competition competition;
-	private JFrame mainFrame;
+	public final JFrame mainFrame;
 	private JPanel leftImagePanel;
 	private JPanel rightImagePanel;
 	private JProgressBar mainProgressBar;
@@ -44,6 +43,7 @@ public class GUI {
 	public GUI(Competition competition) throws IOException {
 		this.buttons = new LinkedList<JButton>();
 		this.competition = competition;
+		mainFrame = new JFrame();
 		initialize();
 		mainFrame.setVisible(true);
 	}
@@ -52,7 +52,6 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		mainFrame = new JFrame();
 		mainFrame.setMinimumSize(new Dimension(1000, 500));
 		mainFrame.setTitle("Face Off");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,11 +77,6 @@ public class GUI {
 		imagesPanel.add(leftImagePanel, gbcLeftImagePanel);
 		leftImagePanel.setLayout(new BoxLayout(leftImagePanel, BoxLayout.Y_AXIS));
 		
-		JLabel lblLeftImage = new JLabel("Left Image");
-		lblLeftImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblLeftImage.setHorizontalAlignment(SwingConstants.CENTER);
-		leftImagePanel.add(lblLeftImage);
-		
 		rightImagePanel = new JPanel();
 		GridBagConstraints gbcRightImagePanel = new GridBagConstraints();
 		gbcRightImagePanel.weightx = 1.0;
@@ -91,11 +85,6 @@ public class GUI {
 		gbcRightImagePanel.gridy = 0;
 		imagesPanel.add(rightImagePanel, gbcRightImagePanel);
 		rightImagePanel.setLayout(new BoxLayout(rightImagePanel, BoxLayout.Y_AXIS));
-		
-		JLabel lblRightImage = new JLabel("Right Image");
-		lblRightImage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRightImage.setAlignmentX(Component.CENTER_ALIGNMENT);
-		rightImagePanel.add(lblRightImage);
 		
 		JPanel controlsPanel = new JPanel();
 		controlsPanel.setBackground(SystemColor.controlDkShadow);

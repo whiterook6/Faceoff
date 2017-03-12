@@ -1,8 +1,10 @@
 package faceoff.competition;
 
 import java.awt.EventQueue;
+import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 
 import faceoff.gui.GUI;
@@ -11,12 +13,14 @@ public class Competition {
 
 	private CompetitionQueue queue;
 	private Competitor left, right;
+	private File sourceDirectory, winnerDirectory, loserDirectory;
 	private GUI gui;
 	private boolean debug = true;
 	
 	public Competition() throws IOException {
 		queue = new CompetitionQueue();
 		gui = new GUI(this);
+		startCompetition();
 	}
 	
 	/**
@@ -41,9 +45,44 @@ public class Competition {
 		}
 	}
 	
+	public void startCompetition(){
+		JFileChooser directoryChooser=new JFileChooser("D:/");
+		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		directoryChooser.setDialogTitle("Select a directory containing your unsorted images");
+		
+		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
+			sourceDirectory = directoryChooser.getSelectedFile();
+		} else {
+			cancel();
+		}
+		
+		directoryChooser=new JFileChooser("D:/");
+		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		directoryChooser.setDialogTitle("Select a directory for your best images");
+		
+		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
+			winnerDirectory = directoryChooser.getSelectedFile();
+		} else {
+			cancel();
+		}
+		
+		directoryChooser=new JFileChooser("D:/");
+		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		directoryChooser.setDialogTitle("Select a directory for your worst images");
+		
+		if (directoryChooser.showOpenDialog(gui.mainFrame) == JFileChooser.APPROVE_OPTION){
+			loserDirectory = directoryChooser.getSelectedFile();
+		} else {
+			cancel();
+		}
+		
+		gui.setPause(true);
+	}
+	
 	public void fight(){
 		setLeft(queue.pop());
 		setRight(queue.pop());
+		gui.setPause(false);
 	}
 	
 	public void setLeft(Competitor competitor){
@@ -101,5 +140,14 @@ public class Competition {
 //		right.getImage().delete();
 //		set_right(queue.pop());
 		debug("deleteRight");
+	}
+	
+	public void commit(){
+		
+	}
+	
+	public void cancel(){
+		gui.mainFrame.setVisible(false); //you can't see me!
+		gui.mainFrame.dispose(); //Destroy the JFrame object
 	}
 }
