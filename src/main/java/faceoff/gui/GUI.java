@@ -3,17 +3,17 @@ package faceoff.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,50 +21,25 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 import faceoff.competition.Competition;
+import faceoff.competition.Competitor;
 
-public class Main {
+public class GUI {
 
+	private final Competition competition;
 	private JFrame frame_faceoff_main;
 	private JPanel left_image_panel;
 	private JPanel right_image_panel;
-	
-	Competition competition;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					Main window = new Main();
-					window.frame_faceoff_main.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 * @throws IOException 
 	 */
-	public Main() throws IOException {
+	public GUI(Competition competition) throws IOException {
+		this.competition = competition;
 		initialize();
-		competition = new Competition();
-		
-		JFileChooser directoryPicker = new JFileChooser("D:/Media");
-		directoryPicker.setDialogTitle("Choose a directory");
-		directoryPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if (directoryPicker.showOpenDialog(frame_faceoff_main) == JFileChooser.APPROVE_OPTION) {
-			competition.addDirectory(directoryPicker.getSelectedFile().toPath());
-			competition.printContents();
-		}
+		frame_faceoff_main.setVisible(true);
 	}
 
 	/**
@@ -128,7 +103,7 @@ public class Main {
 		
 		JButton btnNewButton = new JButton("Embiggen");
 		btnNewButton.setBackground(SystemColor.controlDkShadow);
-		btnNewButton.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Resize-16.png")));
+		btnNewButton.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(5, 5, 5, 5);
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
@@ -136,65 +111,100 @@ public class Main {
 		gbc_btnNewButton.gridy = 0;
 		controls_panel.add(btnNewButton, gbc_btnNewButton);
 		
-		JButton btnLeftWinsa = new JButton("Left Wins (A)");
-		btnLeftWinsa.setBackground(SystemColor.controlDkShadow);
-		btnLeftWinsa.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Circled Left-16.png")));
-		GridBagConstraints gbc_btnLeftWinsa = new GridBagConstraints();
-		gbc_btnLeftWinsa.insets = new Insets(5, 0, 5, 5);
-		gbc_btnLeftWinsa.weightx = 1.0;
-		gbc_btnLeftWinsa.fill = GridBagConstraints.BOTH;
-		gbc_btnLeftWinsa.gridx = 1;
-		gbc_btnLeftWinsa.gridy = 0;
-		controls_panel.add(btnLeftWinsa, gbc_btnLeftWinsa);
+		JButton btnLeftWins = new JButton("Left Wins (A)");
+		btnLeftWins.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.leftWins();
+			}
+		});
+		btnLeftWins.setBackground(SystemColor.controlDkShadow);
+		btnLeftWins.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Circled Left-16.png")));
+		GridBagConstraints gbcBtnLeftWins = new GridBagConstraints();
+		gbcBtnLeftWins.insets = new Insets(5, 0, 5, 5);
+		gbcBtnLeftWins.weightx = 1.0;
+		gbcBtnLeftWins.fill = GridBagConstraints.BOTH;
+		gbcBtnLeftWins.gridx = 1;
+		gbcBtnLeftWins.gridy = 0;
+		controls_panel.add(btnLeftWins, gbcBtnLeftWins);
 		
-		JButton btnNewButton_1 = new JButton("Delete");
-		btnNewButton_1.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_1.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Delete-16.png")));
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton_1.insets = new Insets(5, 0, 5, 5);
-		gbc_btnNewButton_1.gridx = 2;
-		gbc_btnNewButton_1.gridy = 0;
-		controls_panel.add(btnNewButton_1, gbc_btnNewButton_1);
+		JButton btnDeleteLeft = new JButton("Delete");
+		btnDeleteLeft.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.delete_left();
+			}
+		});
+		btnDeleteLeft.setBackground(SystemColor.controlDkShadow);
+		btnDeleteLeft.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Delete-16.png")));
+		GridBagConstraints gbcBtnDeleteLeft = new GridBagConstraints();
+		gbcBtnDeleteLeft.fill = GridBagConstraints.BOTH;
+		gbcBtnDeleteLeft.insets = new Insets(5, 0, 5, 5);
+		gbcBtnDeleteLeft.gridx = 2;
+		gbcBtnDeleteLeft.gridy = 0;
+		controls_panel.add(btnDeleteLeft, gbcBtnDeleteLeft);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
-		gbc_separator_1.fill = GridBagConstraints.BOTH;
-		gbc_separator_1.insets = new Insets(5, 0, 5, 5);
-		gbc_separator_1.gridx = 3;
-		gbc_separator_1.gridy = 0;
-		controls_panel.add(separator_1, gbc_separator_1);
+		GridBagConstraints gbcSeparator1 = new GridBagConstraints();
+		gbcSeparator1.fill = GridBagConstraints.BOTH;
+		gbcSeparator1.insets = new Insets(5, 0, 5, 5);
+		gbcSeparator1.gridx = 3;
+		gbcSeparator1.gridy = 0;
+		controls_panel.add(separator_1, gbcSeparator1);
 		
-		JButton btnNewButton_3 = new JButton("Both Win (Q)");
-		btnNewButton_3.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_3.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Checked-16.png")));
-		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
-		gbc_btnNewButton_3.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton_3.insets = new Insets(5, 0, 5, 5);
-		gbc_btnNewButton_3.gridx = 4;
-		gbc_btnNewButton_3.gridy = 0;
-		controls_panel.add(btnNewButton_3, gbc_btnNewButton_3);
+		JButton btnBothWin = new JButton("Both Win (Q)");
+		btnBothWin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.both_win();
+			}
+		});
+		btnBothWin.setBackground(SystemColor.controlDkShadow);
+		btnBothWin.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Checked-16.png")));
+		GridBagConstraints gbcButtonBothWin = new GridBagConstraints();
+		gbcButtonBothWin.fill = GridBagConstraints.BOTH;
+		gbcButtonBothWin.insets = new Insets(5, 0, 5, 5);
+		gbcButtonBothWin.gridx = 4;
+		gbcButtonBothWin.gridy = 0;
+		controls_panel.add(btnBothWin, gbcButtonBothWin);
 		
 		JButton btnSkip = new JButton("Skip (S)");
+		btnSkip.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.skip();
+			}
+		});
 		btnSkip.setBackground(SystemColor.controlDkShadow);
-		btnSkip.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Refresh-16.png")));
-		GridBagConstraints gbc_btnSkip = new GridBagConstraints();
-		gbc_btnSkip.insets = new Insets(5, 0, 5, 5);
-		gbc_btnSkip.fill = GridBagConstraints.BOTH;
-		gbc_btnSkip.gridx = 5;
-		gbc_btnSkip.gridy = 0;
-		controls_panel.add(btnSkip, gbc_btnSkip);
+		btnSkip.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Refresh-16.png")));
+		GridBagConstraints gbcBtnSkip = new GridBagConstraints();
+		gbcBtnSkip.insets = new Insets(5, 0, 5, 5);
+		gbcBtnSkip.fill = GridBagConstraints.BOTH;
+		gbcBtnSkip.gridx = 5;
+		gbcBtnSkip.gridy = 0;
+		controls_panel.add(btnSkip, gbcBtnSkip);
 		
-		JButton btnNewButton_4 = new JButton("Both Lose (E)");
-		btnNewButton_4.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_4.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
-		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
-		gbc_btnNewButton_4.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton_4.insets = new Insets(5, 0, 5, 5);
-		gbc_btnNewButton_4.gridx = 6;
-		gbc_btnNewButton_4.gridy = 0;
-		controls_panel.add(btnNewButton_4, gbc_btnNewButton_4);
+		JButton btnBothLose = new JButton("Both Lose (E)");
+		btnBothLose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.both_lose();
+			}
+		});
+		btnBothLose.setBackground(SystemColor.controlDkShadow);
+		btnBothLose.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
+		GridBagConstraints gbcBtnBothLose = new GridBagConstraints();
+		gbcBtnBothLose.fill = GridBagConstraints.BOTH;
+		gbcBtnBothLose.insets = new Insets(5, 0, 5, 5);
+		gbcBtnBothLose.gridx = 6;
+		gbcBtnBothLose.gridy = 0;
+		controls_panel.add(btnBothLose, gbcBtnBothLose);
 		
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setOrientation(SwingConstants.VERTICAL);
@@ -206,29 +216,43 @@ public class Main {
 		controls_panel.add(separator_3, gbc_separator_3);
 		
 		JButton btnDeleteRight = new JButton("Delete");
+		btnDeleteRight.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.delete_right();
+			}
+		});
 		btnDeleteRight.setBackground(SystemColor.controlDkShadow);
-		btnDeleteRight.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Delete-16.png")));
-		GridBagConstraints gbc_btnDeleteRight = new GridBagConstraints();
-		gbc_btnDeleteRight.fill = GridBagConstraints.BOTH;
-		gbc_btnDeleteRight.insets = new Insets(5, 0, 5, 5);
-		gbc_btnDeleteRight.gridx = 8;
-		gbc_btnDeleteRight.gridy = 0;
-		controls_panel.add(btnDeleteRight, gbc_btnDeleteRight);
+		btnDeleteRight.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Delete-16.png")));
+		GridBagConstraints gbcBtnDeleteRight = new GridBagConstraints();
+		gbcBtnDeleteRight.fill = GridBagConstraints.BOTH;
+		gbcBtnDeleteRight.insets = new Insets(5, 0, 5, 5);
+		gbcBtnDeleteRight.gridx = 8;
+		gbcBtnDeleteRight.gridy = 0;
+		controls_panel.add(btnDeleteRight, gbcBtnDeleteRight);
 		
-		JButton btnRightWinsd = new JButton("Right Wins (D)");
-		btnRightWinsd.setBackground(SystemColor.controlDkShadow);
-		btnRightWinsd.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Circled Right-16.png")));
-		GridBagConstraints gbc_btnRightWinsd = new GridBagConstraints();
-		gbc_btnRightWinsd.fill = GridBagConstraints.BOTH;
-		gbc_btnRightWinsd.weightx = 1.0;
-		gbc_btnRightWinsd.insets = new Insets(5, 0, 5, 5);
-		gbc_btnRightWinsd.gridx = 9;
-		gbc_btnRightWinsd.gridy = 0;
-		controls_panel.add(btnRightWinsd, gbc_btnRightWinsd);
+		JButton btnRightWins = new JButton("Right Wins (D)");
+		btnRightWins.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				competition.right_wins();
+			}
+		});
+		btnRightWins.setBackground(SystemColor.controlDkShadow);
+		btnRightWins.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Circled Right-16.png")));
+		GridBagConstraints gbcBtnRightWins = new GridBagConstraints();
+		gbcBtnRightWins.fill = GridBagConstraints.BOTH;
+		gbcBtnRightWins.weightx = 1.0;
+		gbcBtnRightWins.insets = new Insets(5, 0, 5, 5);
+		gbcBtnRightWins.gridx = 9;
+		gbcBtnRightWins.gridy = 0;
+		controls_panel.add(btnRightWins, gbcBtnRightWins);
 		
 		JButton btnEmbiggenRight = new JButton("Embiggen");
 		btnEmbiggenRight.setBackground(SystemColor.controlDkShadow);
-		btnEmbiggenRight.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Resize-16.png")));
+		btnEmbiggenRight.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnEmbiggenRight = new GridBagConstraints();
 		gbc_btnEmbiggenRight.insets = new Insets(5, 0, 5, 5);
 		gbc_btnEmbiggenRight.fill = GridBagConstraints.BOTH;
@@ -257,7 +281,7 @@ public class Main {
 		
 		JButton btnReset = new JButton("Reset");
 		btnReset.setBackground(SystemColor.controlDkShadow);
-		btnReset.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Restart-16.png")));
+		btnReset.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Restart-16.png")));
 		GridBagConstraints gbc_btnReset = new GridBagConstraints();
 		gbc_btnReset.insets = new Insets(5, 5, 5, 5);
 		gbc_btnReset.gridx = 0;
@@ -277,7 +301,7 @@ public class Main {
 		
 		JButton btnNewButton_2 = new JButton("Commit");
 		btnNewButton_2.setBackground(SystemColor.controlDkShadow);
-		btnNewButton_2.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Save-16.png")));
+		btnNewButton_2.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Save-16.png")));
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
 		gbc_btnNewButton_2.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton_2.gridx = 2;
@@ -286,7 +310,7 @@ public class Main {
 		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(SystemColor.controlDkShadow);
-		btnCancel.setIcon(new ImageIcon(Main.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
+		btnCancel.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
 		gbc_btnCancel.gridx = 3;
 		gbc_btnCancel.gridy = 0;
@@ -341,5 +365,13 @@ public class Main {
 		JPanel winning_images_panel = new JPanel();
 		winning_images_scroll_pane.setViewportView(winning_images_panel);
 		winning_images_panel.setLayout(new BoxLayout(winning_images_panel, BoxLayout.Y_AXIS));
+	}
+
+	public void set_left(Competitor left){
+		
+	}
+	
+	public void set_right(Competitor right){
+		
 	}
 }
