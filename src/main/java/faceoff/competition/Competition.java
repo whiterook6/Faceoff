@@ -12,6 +12,7 @@ public class Competition {
 	private CompetitionQueue queue;
 	private Competitor left, right;
 	private GUI gui;
+	private boolean debug = true;
 	
 	public Competition() throws IOException {
 		queue = new CompetitionQueue();
@@ -34,65 +35,71 @@ public class Competition {
 		});
 	}
 	
+	private void debug(String message){
+		if (debug){
+			System.out.println("[Competition] "+message);
+		}
+	}
+	
 	public void fight(){
-		set_left(queue.pop());
-		set_right(queue.pop());
+		setLeft(queue.pop());
+		setRight(queue.pop());
 	}
 	
-	public void set_left(Competitor competitor){
+	public void setLeft(Competitor competitor){
 		left = competitor;
-		gui.set_left(left);
+		gui.setLeft(left);
 	}
 	
-	public void set_right(Competitor competitor){
+	public void setRight(Competitor competitor){
 		right = competitor;
-		gui.set_right(right);
+		gui.setRight(right);
 	}
 	
 	public void skip(){
 //		queue.insert_shuffle(left); left = null;
 //		queue.insert_shuffle(right); right = null;
 //		fight();
-		System.out.println("Skip");
+		debug("Skip");
 	}
 	
 	public void leftWins(){
 //		ELO elo = new ELO(left, right);
 //		elo.championWins();
-		System.out.println("LeftWins");
+		debug("LeftWins");
 		skip();
 	}
 	
-	public void right_wins(){
+	public void rightWins(){
 //		ELO elo = new ELO(left, right);
 //		elo.challengerWins();
-		System.out.println("RightWins");
+		debug("RightWins");
 		skip();
 	}
 	
-	public void both_win(){
+	public void bothWin(){
 //		ELO elo = new ELO(left, right);
 //		elo.bothWin();
-		System.out.println("BothWin");
+		debug("BothWin");
 		skip();
 	}
 	
-	public void both_lose(){
+	public void bothLose(){
 //		ELO elo = new ELO(left, right);
 //		elo.bothLose();
-		System.out.println("BothLose");
+		debug("BothLose");
 		skip();
 	}
 	
-	public void delete_left(){
+	public void deleteLeft(){
 //		left.getImage().delete();
 //		set_left(queue.pop());
-		System.out.println("deleteLeft");
+		debug("deleteLeft");
 	}
 	
-	public void delete_right(){
+	public void deleteRight(){
 //		right.getImage().delete();
 //		set_right(queue.pop());
-		System.out.println("deleteRight");
+		debug("deleteRight");
 	}
 }
