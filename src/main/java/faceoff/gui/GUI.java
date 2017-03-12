@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,8 +31,8 @@ public class GUI {
 
 	private final Competition competition;
 	public final JFrame mainFrame;
-	private JPanel leftImagePanel;
-	private JPanel rightImagePanel;
+	private JLabel leftImageLabel;
+	private JLabel rightImageLabel;
 	private JProgressBar mainProgressBar;
 	private List<JButton> buttons;
 	private JProgressBar secondaryProgressBar;
@@ -67,24 +68,23 @@ public class GUI {
 		gblImagesPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		imagesPanel.setLayout(gblImagesPanel);
 		
-		leftImagePanel = new JPanel();
-		GridBagConstraints gbcLeftImagePanel = new GridBagConstraints();
-		gbcLeftImagePanel.insets = new Insets(0, 0, 0, 5);
-		gbcLeftImagePanel.weightx = 1.0;
-		gbcLeftImagePanel.fill = GridBagConstraints.BOTH;
-		gbcLeftImagePanel.gridx = 0;
-		gbcLeftImagePanel.gridy = 0;
-		imagesPanel.add(leftImagePanel, gbcLeftImagePanel);
-		leftImagePanel.setLayout(new BoxLayout(leftImagePanel, BoxLayout.Y_AXIS));
+		leftImageLabel = new JLabel();
+		leftImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbcLeftImageLabel = new GridBagConstraints();
+		gbcLeftImageLabel.fill = GridBagConstraints.BOTH;
+		gbcLeftImageLabel.gridx = 0;
+		gbcLeftImageLabel.gridy = 0;
+		gbcLeftImageLabel.weightx = 1.0;
+		imagesPanel.add(leftImageLabel, gbcLeftImageLabel);
 		
-		rightImagePanel = new JPanel();
-		GridBagConstraints gbcRightImagePanel = new GridBagConstraints();
-		gbcRightImagePanel.weightx = 1.0;
-		gbcRightImagePanel.fill = GridBagConstraints.BOTH;
-		gbcRightImagePanel.gridx = 1;
-		gbcRightImagePanel.gridy = 0;
-		imagesPanel.add(rightImagePanel, gbcRightImagePanel);
-		rightImagePanel.setLayout(new BoxLayout(rightImagePanel, BoxLayout.Y_AXIS));
+		rightImageLabel = new JLabel();
+		rightImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbcRightImageLabel = new GridBagConstraints();
+		gbcRightImageLabel.fill = GridBagConstraints.BOTH;
+		gbcRightImageLabel.gridx = 1;
+		gbcRightImageLabel.gridy = 0;
+		gbcRightImageLabel.weightx = 1.0;
+		imagesPanel.add(rightImageLabel, gbcRightImageLabel);
 		
 		JPanel controlsPanel = new JPanel();
 		controlsPanel.setBackground(SystemColor.controlDkShadow);
@@ -394,15 +394,17 @@ public class GUI {
 	}
 
 	public void setLeft(Competitor left) throws IOException{
-		System.out.println("Left: "+left.getImage().getName());
-		Dimension leftImagePanelSize = leftImagePanel.getSize();
-		left.getThumbnail(leftImagePanelSize.width, leftImagePanelSize.height);
+		Dimension leftImagePanelSize = leftImageLabel.getSize();
+		System.out.println(leftImagePanelSize.getWidth()+":"+leftImagePanelSize.getHeight());
+		BufferedImage thumbnail = left.getThumbnail(leftImagePanelSize.width, leftImagePanelSize.height);
+		leftImageLabel.setIcon(new ImageIcon(thumbnail));
+		
 	}
 	
 	public void setRight(Competitor right) throws IOException{
-		System.out.println("Right: "+right.getImage().getName());
-		Dimension rightImagePanelSize = rightImagePanel.getSize();
-		right.getThumbnail(rightImagePanelSize.width, rightImagePanelSize.height);
+		Dimension rightImagePanelSize = rightImageLabel.getSize();
+		BufferedImage thumbnail = right.getThumbnail(rightImagePanelSize.width, rightImagePanelSize.height);
+		rightImageLabel.setIcon(new ImageIcon(thumbnail));
 	}
 	
 	public void setMainProgress(int progress){

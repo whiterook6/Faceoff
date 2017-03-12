@@ -70,7 +70,7 @@ public class Competition {
 		
 		loadImages(sourceDirectory);
 		
-		directoryChooser=new JFileChooser("D:/");
+		directoryChooser=new JFileChooser("D:/Workspace/Winners");
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		directoryChooser.setDialogTitle("Select a directory for your best images");
 		
@@ -86,7 +86,7 @@ public class Competition {
 			return;
 		}
 		
-		directoryChooser=new JFileChooser("D:/");
+		directoryChooser=new JFileChooser("D:/Workspace/Losers");
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		directoryChooser.setDialogTitle("Select a directory for your worst images");
 		
