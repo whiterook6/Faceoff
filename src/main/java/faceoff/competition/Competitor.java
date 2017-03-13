@@ -18,6 +18,7 @@ public class Competitor {
 	private BufferedImage image;
 	private double score;
 	private Dimension dimension;
+	private boolean hasFought = false;
 
 	public Competitor(File file) {
 		this.file = file;
@@ -81,5 +82,13 @@ public class Competitor {
 	
 	public void setScore(double score) {
 		this.score = score;
+	}
+	
+	public void setFought(){
+		this.hasFought = true;
+	}
+	
+	public boolean getHasFought(){
+		return this.hasFought;
 	}
 }

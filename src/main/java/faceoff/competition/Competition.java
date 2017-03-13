@@ -164,6 +164,8 @@ public class Competition {
 	public void leftWins(){
 		ELO elo = new ELO(left, right);
 		elo.championWins();
+		left.setFought();
+		right.setFought();
 		gui.incrementMainProgress();
 		skip();
 	}
@@ -171,6 +173,8 @@ public class Competition {
 	public void rightWins(){
 		ELO elo = new ELO(left, right);
 		elo.challengerWins();
+		left.setFought();
+		right.setFought();
 		gui.incrementMainProgress();
 		skip();
 	}
@@ -178,6 +182,8 @@ public class Competition {
 	public void bothWin(){
 		ELO elo = new ELO(left, right);
 		elo.bothWin();
+		left.setFought();
+		right.setFought();
 		gui.incrementMainProgress();
 		skip();
 	}
@@ -185,6 +191,8 @@ public class Competition {
 	public void bothLose(){
 		ELO elo = new ELO(left, right);
 		elo.bothLose();
+		left.setFought();
+		right.setFought();
 		gui.incrementMainProgress();
 		skip();
 	}
@@ -223,16 +231,20 @@ public class Competition {
 
 		String winnerDirectoryName = winnerDirectory.getAbsolutePath()+File.separator;
 		for (Competitor competitor : best) {
-			File image = competitor.getImage();
-			String filename = image.getName();
-			image.renameTo(new File(winnerDirectoryName + filename));
+			if (competitor.getHasFought()){
+				File image = competitor.getImage();
+				String filename = image.getName();
+				image.renameTo(new File(winnerDirectoryName + filename));
+			}
 		}
 
 		String loserDirectoryName = loserDirectory.getAbsolutePath()+File.separator;
 		for (Competitor competitor : worst) {
-			File image = competitor.getImage();
-			String filename = image.getName();
-			image.renameTo(new File(loserDirectoryName + filename));
+			if (competitor.getHasFought()){
+				File image = competitor.getImage();
+				String filename = image.getName();
+				image.renameTo(new File(loserDirectoryName + filename));
+			}
 		}
 		
 		try {
