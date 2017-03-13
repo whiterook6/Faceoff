@@ -4,10 +4,13 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+
+import com.sun.jna.platform.FileUtils;
 
 import faceoff.elo.ELO;
 import faceoff.gui.GUI;
@@ -16,11 +19,13 @@ public class Competition {
 
 	private CompetitionQueue queue;
 	private Competitor left, right;
+	private List<File> toDelete;
 	private File sourceDirectory, winnerDirectory, loserDirectory;
 	private GUI gui;
 	private boolean debug = true;
 	
 	public Competition() throws IOException {
+		toDelete = new LinkedList<>();
 		queue = new CompetitionQueue();
 		gui = new GUI(this);
 		startCompetition();
@@ -37,6 +42,7 @@ public class Competition {
 					new Competition();
 				} catch (Exception e) {
 					e.printStackTrace();
+					return;
 				}
 			}
 		});
@@ -184,7 +190,7 @@ public class Competition {
 	}
 	
 	public void deleteLeft(){
-//		left.getImage().delete();
+		toDelete.add(left.getImage());
 		left = queue.pop();
 		try {
 			gui.battle(left, right);
@@ -196,7 +202,7 @@ public class Competition {
 	}
 	
 	public void deleteRight(){
-//		right.getImage().delete();
+		toDelete.add(right.getImage());
 		right = queue.pop();
 		try {
 			gui.battle(left, right);
@@ -205,7 +211,6 @@ public class Competition {
 			return;
 		}
 		gui.setMainProgressMaximum(queue.size());
-		debug("deleteRight");
 	}
 	
 	public void commit(){
@@ -228,6 +233,16 @@ public class Competition {
 			File image = competitor.getImage();
 			String filename = image.getName();
 			image.renameTo(new File(loserDirectoryName + filename));
+		}
+		
+		try {
+			if (!toDelete.isEmpty()){
+				FileUtils fileUtils = FileUtils.getInstance();
+				File[] filesToDelete = toDelete.toArray(new File[toDelete.size()]);
+				fileUtils.moveToTrash(filesToDelete);
+			}
+		} catch (IOException iOE){
+			debug("There was a problem deleting all those files, yo.");
 		}
 		
 		cancel();
