@@ -52,11 +52,15 @@ public class CompetitionQueue {
 		best.addAll(queue);
 		Collections.sort(best, new Comparator<Competitor>() {
 			@Override
-			public int compare(Competitor o1, Competitor o2) {
-				return o1.getScore() > o2.getScore() ? 1 : -1;
+			public int compare(Competitor left, Competitor right) {
+				if (left == right){
+					return 0;
+				}
+				
+				return Double.compare(right.getScore(), left.getScore()); // get the highest scores first (sort desc)
 			}
 		});
-		return best.subList(0, howMany - 1);
+		return best.subList(0, howMany);
 	}
 
 	public List<Competitor> getWorst(int howMany){
@@ -64,10 +68,14 @@ public class CompetitionQueue {
 		best.addAll(queue);
 		Collections.sort(best, new Comparator<Competitor>() {
 			@Override
-			public int compare(Competitor o1, Competitor o2) {
-				return o1.getScore() > o2.getScore() ? -1 : 1;
+			public int compare(Competitor left, Competitor right) {
+				if (left == right){
+					return 0;
+				}
+				
+				return Double.compare(left.getScore(), right.getScore()); // get the lowest scores first
 			}
 		});
-		return best.subList(0, howMany - 1);
+		return best.subList(0, howMany);
 	}
 }

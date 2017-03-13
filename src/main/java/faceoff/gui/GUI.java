@@ -406,6 +406,11 @@ public class GUI {
 //	}
 	
 	public void battle(Competitor left, Competitor right) throws IOException{
+		BufferedImage leftImage = left.lazyLoadImage(),
+			rightImage = right.lazyLoadImage(),
+			leftImageScaled,
+			rightImageScaled;
+
 		double widthViewport = imagesPanel.getWidth(),
 			heightViewport = imagesPanel.getHeight(),
 		
@@ -418,20 +423,24 @@ public class GUI {
 		double ratioLeft = (heightRight * widthViewport) / (heightLeft * widthRight + heightRight * widthLeft),
 			ratioRight = (heightLeft * ratioLeft) / heightRight;
 		
-		ratioLeft = Math.min(ratioLeft, heightViewport / heightLeft);
-		ratioRight = Math.min(ratioRight,  heightViewport / heightRight);
+		if (ratioLeft >= 1.0){
+			leftImageScaled = leftImage;
+		} else {
+			ratioLeft = Math.min(ratioLeft, heightViewport / heightLeft);
+			int widthLeftScaled = (int)(widthLeft * ratioLeft),
+				heightLeftScaled = (int)(heightLeft * ratioLeft);
+			leftImageScaled = Scalr.resize(leftImage, widthLeftScaled, heightLeftScaled);
+		}
 		
-		int widthLeftScaled = (int)(widthLeft * ratioLeft),
-			heightLeftScaled = (int)(heightLeft * ratioLeft),
+		if (ratioRight >= 1.0){
+			rightImageScaled = rightImage;
+		} else {
+			ratioRight = Math.min(ratioRight,  heightViewport / heightRight);
 			
-			widthRightScaled = (int)(widthRight * ratioRight),
-			heightRightScaled = (int)(heightRight * ratioRight);
-		
-		BufferedImage leftImage = left.lazyLoadImage(),
-			rightImage = right.lazyLoadImage(),
-			
-			leftImageScaled = Scalr.resize(leftImage, widthLeftScaled, heightLeftScaled),
+			int widthRightScaled = (int)(widthRight * ratioRight),
+				heightRightScaled = (int)(heightRight * ratioRight);
 			rightImageScaled = Scalr.resize(rightImage, widthRightScaled, heightRightScaled);
+		}
 
 		leftImageLabel.setIcon(new ImageIcon(leftImageScaled));
 		rightImageLabel.setIcon(new ImageIcon(rightImageScaled));
