@@ -1,11 +1,11 @@
 package faceoff.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -57,11 +57,16 @@ public class GUI {
 		mainFrame.setMinimumSize(new Dimension(1000, 500));
 		mainFrame.setTitle("Face Off");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		Container contentPane = mainFrame.getContentPane();
+		contentPane.setBackground(Colors.DARK_BG);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
 		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		imagesPanel = new JPanel();
-		mainFrame.getContentPane().add(imagesPanel, BorderLayout.CENTER);
+		imagesPanel.setBackground(Colors.DARK_BG);
+		contentPane.add(imagesPanel, BorderLayout.CENTER);
 		GridBagLayout gblImagesPanel = new GridBagLayout();
 		gblImagesPanel.columnWidths = new int[]{0, 0, 0};
 		gblImagesPanel.rowHeights = new int[]{0, 0};
@@ -88,8 +93,8 @@ public class GUI {
 		imagesPanel.add(rightImageLabel, gbcRightImageLabel);
 		
 		JPanel controlsPanel = new JPanel();
-		controlsPanel.setBackground(SystemColor.controlDkShadow);
-		mainFrame.getContentPane().add(controlsPanel, BorderLayout.SOUTH);
+		controlsPanel.setBackground(Colors.DARK_BG);
+		contentPane.add(controlsPanel, BorderLayout.SOUTH);
 		GridBagLayout gblControlsPanel = new GridBagLayout();
 		gblControlsPanel.columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gblControlsPanel.rowHeights = new int[]{0, 0};
@@ -98,7 +103,7 @@ public class GUI {
 		controlsPanel.setLayout(gblControlsPanel);
 		
 		JButton btnEmbiggenLeft = new JButton("Embiggen");
-		btnEmbiggenLeft.setBackground(SystemColor.controlDkShadow);
+		styleButton(btnEmbiggenLeft);
 		btnEmbiggenLeft.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(5, 5, 5, 5);
@@ -116,7 +121,6 @@ public class GUI {
 				competition.leftWins();
 			}
 		});
-		btnLeftWins.setBackground(SystemColor.controlDkShadow);
 		btnLeftWins.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Circled Left-16.png")));
 		GridBagConstraints gbcBtnLeftWins = new GridBagConstraints();
 		gbcBtnLeftWins.insets = new Insets(5, 0, 5, 5);
@@ -135,7 +139,6 @@ public class GUI {
 				competition.deleteLeft();
 			}
 		});
-		btnDeleteLeft.setBackground(SystemColor.controlDkShadow);
 		btnDeleteLeft.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Delete-16.png")));
 		GridBagConstraints gbcBtnDeleteLeft = new GridBagConstraints();
 		gbcBtnDeleteLeft.fill = GridBagConstraints.BOTH;
@@ -162,7 +165,6 @@ public class GUI {
 				competition.bothWin();
 			}
 		});
-		btnBothWin.setBackground(SystemColor.controlDkShadow);
 		btnBothWin.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Checked-16.png")));
 		GridBagConstraints gbcButtonBothWin = new GridBagConstraints();
 		gbcButtonBothWin.fill = GridBagConstraints.BOTH;
@@ -180,7 +182,6 @@ public class GUI {
 				competition.skip();
 			}
 		});
-		btnSkip.setBackground(SystemColor.controlDkShadow);
 		btnSkip.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Refresh-16.png")));
 		GridBagConstraints gbcBtnSkip = new GridBagConstraints();
 		gbcBtnSkip.insets = new Insets(5, 0, 5, 5);
@@ -198,7 +199,6 @@ public class GUI {
 				competition.bothLose();
 			}
 		});
-		btnBothLose.setBackground(SystemColor.controlDkShadow);
 		btnBothLose.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
 		GridBagConstraints gbcBtnBothLose = new GridBagConstraints();
 		gbcBtnBothLose.fill = GridBagConstraints.BOTH;
@@ -225,7 +225,6 @@ public class GUI {
 				competition.deleteRight();
 			}
 		});
-		btnDeleteRight.setBackground(SystemColor.controlDkShadow);
 		btnDeleteRight.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Delete-16.png")));
 		GridBagConstraints gbcBtnDeleteRight = new GridBagConstraints();
 		gbcBtnDeleteRight.fill = GridBagConstraints.BOTH;
@@ -243,7 +242,6 @@ public class GUI {
 				competition.rightWins();
 			}
 		});
-		btnRightWins.setBackground(SystemColor.controlDkShadow);
 		btnRightWins.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Circled Right-16.png")));
 		GridBagConstraints gbcBtnRightWins = new GridBagConstraints();
 		gbcBtnRightWins.fill = GridBagConstraints.BOTH;
@@ -255,7 +253,6 @@ public class GUI {
 		buttons.add(btnRightWins);
 		
 		JButton btnEmbiggenRight = new JButton("Embiggen");
-		btnEmbiggenRight.setBackground(SystemColor.controlDkShadow);
 		btnEmbiggenRight.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnEmbiggenRight = new GridBagConstraints();
 		gbc_btnEmbiggenRight.insets = new Insets(5, 0, 5, 5);
@@ -275,8 +272,8 @@ public class GUI {
 		controlsPanel.add(secondaryProgressBar, gbcSecondaryProgressBar);
 		
 		JPanel progressPanel = new JPanel();
-		progressPanel.setBackground(SystemColor.controlDkShadow);
-		mainFrame.getContentPane().add(progressPanel, BorderLayout.NORTH);
+		progressPanel.setBackground(Colors.DARK_BG);
+		contentPane.add(progressPanel, BorderLayout.NORTH);
 		GridBagLayout gbl_progress_panel = new GridBagLayout();
 		gbl_progress_panel.columnWidths = new int[]{0, 289, 0, 0, 0};
 		gbl_progress_panel.rowHeights = new int[]{14, 0};
@@ -285,7 +282,6 @@ public class GUI {
 		progressPanel.setLayout(gbl_progress_panel);
 		
 		JButton btnReset = new JButton("Reset");
-		btnReset.setBackground(SystemColor.controlDkShadow);
 		btnReset.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Restart-16.png")));
 		GridBagConstraints gbc_btnReset = new GridBagConstraints();
 		gbc_btnReset.insets = new Insets(5, 5, 5, 5);
@@ -313,7 +309,6 @@ public class GUI {
 		progressPanel.add(mainProgressBar, gbcMainProgressBar);
 		
 		JButton btnCommit = new JButton("Commit");
-		btnCommit.setBackground(SystemColor.controlDkShadow);
 		btnCommit.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Save-16.png")));
 		GridBagConstraints gbcBtnCommit = new GridBagConstraints();
 		gbcBtnCommit.insets = new Insets(0, 0, 0, 5);
@@ -329,7 +324,6 @@ public class GUI {
 		});
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBackground(SystemColor.controlDkShadow);
 		btnCancel.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Cancel-16.png")));
 		GridBagConstraints gbcBtnCancel = new GridBagConstraints();
 		gbcBtnCancel.gridx = 3;
@@ -444,6 +438,13 @@ public class GUI {
 
 		leftImageLabel.setIcon(new ImageIcon(leftImageScaled));
 		rightImageLabel.setIcon(new ImageIcon(rightImageScaled));
+	}
+	
+	private void styleButton(JButton button){
+        button.setOpaque(true);
+		button.setBackground(Colors.BTN);
+		button.setForeground(Colors.LIGHT_FG);
+		button.setBorderPainted(false);
 	}
 
 	public void setMainProgress(int progress){
