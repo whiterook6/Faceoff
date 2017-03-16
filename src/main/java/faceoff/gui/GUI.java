@@ -336,68 +336,7 @@ public class GUI {
 				competition.cancel();
 			}
 		});
-		
-//		JPanel losersPanel = new JPanel();
-//		mainFrame.getContentPane().add(losersPanel, BorderLayout.WEST);
-//		GridBagLayout glbLosersPanel = new GridBagLayout();
-//		glbLosersPanel.columnWidths = new int[]{150, 0};
-//		glbLosersPanel.rowHeights = new int[]{0, 0};
-//		glbLosersPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-//		glbLosersPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
-//		losersPanel.setLayout(glbLosersPanel);
-//		
-//		JScrollPane losingImagesScrollPane = new JScrollPane();
-//		GridBagConstraints gbcLosingImagesScollPane = new GridBagConstraints();
-//		gbcLosingImagesScollPane.fill = GridBagConstraints.BOTH;
-//		gbcLosingImagesScollPane.gridx = 0;
-//		gbcLosingImagesScollPane.gridy = 0;
-//		losersPanel.add(losingImagesScrollPane, gbcLosingImagesScollPane);
-//		
-//		JLabel lblLosingImages = new JLabel("Losing Images");
-//		lblLosingImages.setHorizontalAlignment(SwingConstants.CENTER);
-//		losingImagesScrollPane.setColumnHeaderView(lblLosingImages);
-//		
-//		JPanel losing_images_panel = new JPanel();
-//		losingImagesScrollPane.setViewportView(losing_images_panel);
-//		losing_images_panel.setLayout(new BoxLayout(losing_images_panel, BoxLayout.Y_AXIS));
-//		
-//		JPanel winnersPanel = new JPanel();
-//		mainFrame.getContentPane().add(winnersPanel, BorderLayout.EAST);
-//		GridBagLayout gbl_winners_panel = new GridBagLayout();
-//		gbl_winners_panel.columnWidths = new int[]{150, 0};
-//		gbl_winners_panel.rowHeights = new int[]{0, 0};
-//		gbl_winners_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-//		gbl_winners_panel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
-//		winnersPanel.setLayout(gbl_winners_panel);
-//		
-//		JScrollPane winningImagesScrollPane = new JScrollPane();
-//		GridBagConstraints gbc_winning_images_scroll_pane = new GridBagConstraints();
-//		gbc_winning_images_scroll_pane.weighty = 1.0;
-//		gbc_winning_images_scroll_pane.fill = GridBagConstraints.BOTH;
-//		gbc_winning_images_scroll_pane.gridx = 0;
-//		gbc_winning_images_scroll_pane.gridy = 0;
-//		winnersPanel.add(winningImagesScrollPane, gbc_winning_images_scroll_pane);
-//
-//		
-//		JLabel lblWinningImages = new JLabel("Winning Images");
-//		lblWinningImages.setHorizontalAlignment(SwingConstants.CENTER);
-//		winningImagesScrollPane.setColumnHeaderView(lblWinningImages);
-//		
-//		JPanel winningImagesPanel = new JPanel();
-//		winningImagesScrollPane.setViewportView(winningImagesPanel);
-//		winningImagesPanel.setLayout(new BoxLayout(winningImagesPanel, BoxLayout.Y_AXIS));
 	}
-
-//	public void setLeft(Competitor left) throws IOException{
-//		System.out.println("Left image: "+left.getImage().getAbsoluteFile());
-//		
-//	}
-//	
-//	public void setRight(Competitor right) throws IOException{
-//		
-//		rightImageLabel.setIcon(new ImageIcon(thumbnail));
-//		System.out.println("Right image: "+right.getImage().getAbsoluteFile());
-//	}
 	
 	public void battle(Competitor left, Competitor right) throws IOException{
 		BufferedImage leftImage = left.lazyLoadImage(),

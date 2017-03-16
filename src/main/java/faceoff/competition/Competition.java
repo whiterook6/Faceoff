@@ -1,6 +1,9 @@
 package faceoff.competition;
 
 import java.awt.EventQueue;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -23,11 +26,13 @@ public class Competition {
 	private File sourceDirectory, winnerDirectory, loserDirectory;
 	private GUI gui;
 	private boolean debug = true;
+	private KeyEventDispatcher shortcutManager;
 	
 	public Competition() throws IOException {
 		toDelete = new LinkedList<>();
 		queue = new CompetitionQueue();
 		gui = new GUI(this);
+		addShortcuts();
 		startCompetition();
 	}
 	
@@ -54,9 +59,48 @@ public class Competition {
 		}
 	}
 	
+	private void addShortcuts(){
+		this.shortcutManager = new KeyEventDispatcher() {
+			
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				if (e.getID() != KeyEvent.KEY_RELEASED){
+					return false;
+				}
+				
+				System.out.println(e.getKeyChar());
+				switch (e.getKeyChar()){
+					case 'q':
+					case 'Q':
+						bothWin();
+						return true;
+					case 'e':
+					case 'E':
+						bothLose();
+						return true;
+					case 'a':
+					case 'A':
+						leftWins();
+						return true;
+					case 's':
+					case 'S':
+						skip();
+						return true;
+					case 'd':
+					case 'D':
+						rightWins();
+						return true;
+				}
+				
+				return false;
+			}
+		};
+	}
+	
 	public void startCompetition(){
 		queue.getQueue().clear();
 		gui.setMainProgress(0);
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(shortcutManager);
 
 		JFileChooser directoryChooser=new JFileChooser("D:/");
 		directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -108,6 +152,7 @@ public class Competition {
 			return;
 		}
 		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(shortcutManager);
 		fight();
 	}
 	
