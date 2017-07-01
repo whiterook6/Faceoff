@@ -60,6 +60,14 @@ public class Competitor {
 		return image;
 	}
 	
+	public void clearCache(){
+		if (image == null){
+			return;
+		}
+		
+		image.flush();
+	}
+	
 	public int getWidth() throws IOException{
 		if (dimension == null){
 			lazyLoadImage();
@@ -90,5 +98,14 @@ public class Competitor {
 	
 	public boolean getHasFought(){
 		return this.hasFought;
+	}
+	
+	@Override
+	public String toString() {
+		if (null != this.dimension){
+			return String.format("%s [%dx%d]", this.file.getName(), this.dimension.width, this.dimension.height);	
+		} else {
+			return this.file.getName();
+		}
 	}
 }

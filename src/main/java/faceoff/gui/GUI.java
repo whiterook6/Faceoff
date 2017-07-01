@@ -31,11 +31,10 @@ public class GUI {
 
 	private final Competition competition;
 	public final JFrame mainFrame;
-	private JLabel leftImageLabel;
-	private JLabel rightImageLabel;
+	private JLabel leftImageLabel, leftImageTitle, rightImageLabel, rightImageTitle;
+	private ImageIcon leftImageIcon, rightImageIcon;
 	private JProgressBar mainProgressBar;
 	private List<JButton> buttons;
-	private JProgressBar secondaryProgressBar;
 	private JPanel imagesPanel;
 
 	/**
@@ -71,7 +70,7 @@ public class GUI {
 		gblImagesPanel.columnWidths = new int[]{0, 0, 0};
 		gblImagesPanel.rowHeights = new int[]{0, 0};
 		gblImagesPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gblImagesPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		gblImagesPanel.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		imagesPanel.setLayout(gblImagesPanel);
 		
 		leftImageLabel = new JLabel();
@@ -83,6 +82,17 @@ public class GUI {
 		gbcLeftImageLabel.weightx = 1.0;
 		imagesPanel.add(leftImageLabel, gbcLeftImageLabel);
 		
+		leftImageTitle = new JLabel();
+		leftImageTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		leftImageTitle.setForeground(Colors.LIGHT_FG);
+		GridBagConstraints gbcLeftImageTitle = new GridBagConstraints();
+		gbcLeftImageTitle.fill = GridBagConstraints.BOTH;
+		gbcLeftImageTitle.gridx = 0;
+		gbcLeftImageLabel.gridy = 1;
+		gbcLeftImageTitle.weightx = 1.0;
+		imagesPanel.add(leftImageTitle, gbcLeftImageTitle);
+		
+		
 		rightImageLabel = new JLabel();
 		rightImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbcRightImageLabel = new GridBagConstraints();
@@ -91,6 +101,16 @@ public class GUI {
 		gbcRightImageLabel.gridy = 0;
 		gbcRightImageLabel.weightx = 1.0;
 		imagesPanel.add(rightImageLabel, gbcRightImageLabel);
+		
+		rightImageTitle = new JLabel();
+		rightImageTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		rightImageTitle.setForeground(Colors.LIGHT_FG);
+		GridBagConstraints gbcRightImageTitle = new GridBagConstraints();
+		gbcRightImageTitle.fill = GridBagConstraints.BOTH;
+		gbcRightImageTitle.gridx = 1;
+		gbcRightImageTitle.gridy = 1;
+		gbcRightImageTitle.weightx = 1.0;
+		imagesPanel.add(rightImageTitle, gbcRightImageTitle);
 		
 		JPanel controlsPanel = new JPanel();
 		controlsPanel.setBackground(Colors.DARK_BG);
@@ -262,15 +282,6 @@ public class GUI {
 		controlsPanel.add(btnEmbiggenRight, gbc_btnEmbiggenRight);
 		buttons.add(btnEmbiggenRight);
 		
-		secondaryProgressBar = new JProgressBar();
-		GridBagConstraints gbcSecondaryProgressBar = new GridBagConstraints();
-		gbcSecondaryProgressBar.fill = GridBagConstraints.BOTH;
-		gbcSecondaryProgressBar.gridwidth = 11;
-		gbcSecondaryProgressBar.insets = new Insets(0, 5, 5, 5);
-		gbcSecondaryProgressBar.gridx = 0;
-		gbcSecondaryProgressBar.gridy = 1;
-		controlsPanel.add(secondaryProgressBar, gbcSecondaryProgressBar);
-		
 		JPanel progressPanel = new JPanel();
 		progressPanel.setBackground(Colors.DARK_BG);
 		contentPane.add(progressPanel, BorderLayout.NORTH);
@@ -339,6 +350,14 @@ public class GUI {
 	}
 	
 	public void battle(Competitor left, Competitor right) throws IOException{
+		if (null != leftImageIcon && null != leftImageIcon.getImage()){
+			leftImageIcon.getImage().flush();
+		}
+
+		if (null != rightImageIcon && null != rightImageIcon.getImage()){
+			rightImageIcon.getImage().flush();
+		}
+
 		BufferedImage leftImage = left.lazyLoadImage(),
 			rightImage = right.lazyLoadImage(),
 			leftImageScaled,
@@ -375,8 +394,12 @@ public class GUI {
 			rightImageScaled = Scalr.resize(rightImage, widthRightScaled, heightRightScaled);
 		}
 
+		ImageIcon tmp = new ImageIcon(leftImageScaled);
+		tmp.getImage().flush();
 		leftImageLabel.setIcon(new ImageIcon(leftImageScaled));
+		leftImageTitle.setText(left.toString());
 		rightImageLabel.setIcon(new ImageIcon(rightImageScaled));
+		rightImageTitle.setText(right.toString());
 	}
 	
 	private void styleButton(JButton button){
@@ -403,9 +426,5 @@ public class GUI {
 		for (JButton button : buttons) {
 			button.setEnabled(!is_paused);
 		}
-	}
-	
-	public void setSecondaryProgress(int progress){
-		secondaryProgressBar.setValue(progress);
 	}
 }

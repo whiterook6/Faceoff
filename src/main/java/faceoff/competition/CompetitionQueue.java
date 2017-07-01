@@ -39,6 +39,7 @@ public class CompetitionQueue {
 	}
 	
 	public void insert_shuffle(Competitor competitor){
+		competitor.clearCache();
 		if (queue.isEmpty()){
 			queue.addFirst(competitor);
 		} else {	
