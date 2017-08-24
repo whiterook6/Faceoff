@@ -123,7 +123,6 @@ public class GUI {
 		controlsPanel.setLayout(gblControlsPanel);
 		
 		JButton btnEmbiggenLeft = new JButton("Embiggen");
-		styleButton(btnEmbiggenLeft);
 		btnEmbiggenLeft.setIcon(new ImageIcon(GUI.class.getResource("/faceoff/gui/icons/Resize-16.png")));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(5, 5, 5, 5);
@@ -402,13 +401,6 @@ public class GUI {
 		rightImageTitle.setText(right.toString());
 	}
 	
-	private void styleButton(JButton button){
-        button.setOpaque(true);
-		button.setBackground(Colors.BTN);
-		button.setForeground(Colors.LIGHT_FG);
-		button.setBorderPainted(false);
-	}
-
 	public void setMainProgress(int progress){
 		mainProgressBar.setValue(progress);
 	}

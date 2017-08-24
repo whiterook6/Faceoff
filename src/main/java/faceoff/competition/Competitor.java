@@ -66,6 +66,7 @@ public class Competitor {
 		}
 		
 		image.flush();
+		image = null;
 	}
 	
 	public int getWidth() throws IOException{

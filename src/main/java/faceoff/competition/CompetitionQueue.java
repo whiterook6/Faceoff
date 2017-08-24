@@ -42,8 +42,9 @@ public class CompetitionQueue {
 		competitor.clearCache();
 		if (queue.isEmpty()){
 			queue.addFirst(competitor);
-		} else {	
-			int random_position = (int)(Math.random() * queue.size());
+		} else {
+			int half_size = queue.size() / 2;
+			int random_position = (int)(Math.random() * half_size) + half_size;
 			queue.add(random_position, competitor);
 		}
 	}
