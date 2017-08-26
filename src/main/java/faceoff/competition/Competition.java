@@ -21,7 +21,8 @@ import faceoff.gui.GUI;
 public class Competition {
 
 	private CompetitionQueue queue;
-	private Competitor left, right;
+	private CompetitionPair competitionPair;
+	private LoadingThread nextCompetitionPair;
 	private List<File> toDelete;
 	private File sourceDirectory, winnerDirectory, loserDirectory;
 	private GUI gui;
@@ -187,26 +188,49 @@ public class Competition {
 		gui.setMainProgressMaximum(queue.size());
 	}
 	
-	public void fight(){
-		left = queue.pop();
-		right = queue.pop();
+	public void fight() {
+		if (null == nextCompetitionPair){
+			competitionPair = new CompetitionPair(queue.pop(), queue.pop());
+			try {
+				competitionPair.load_scaled_images(gui.imagesPanel.getSize());
+			} catch (IOException e) {}
+		} else {
+			try {
+				System.out.println("Waiting...");
+				synchronized (nextCompetitionPair) {
+					if (nextCompetitionPair.getCompetitionPair().getLeftImageScaled() == null){
+						nextCompetitionPair.wait();
+					}
+				}
+			} catch (InterruptedException e) {}
 
+			System.out.println("Done waiting");
+			competitionPair = nextCompetitionPair.getCompetitionPair();
+		}
+		
 		try {
-			gui.battle(left, right);
+			gui.battle(competitionPair);
 		} catch (IOException e) {
 			cancel();
 			return;
 		}
+		
+		nextCompetitionPair = new LoadingThread(new CompetitionPair(queue.pop(), queue.pop()), gui.imagesPanel.getSize());
+		nextCompetitionPair.start();
 		gui.setPause(false);
 	}
 	
 	public void skip(){
-		queue.insert_shuffle(left); left = null;
-		queue.insert_shuffle(right); right = null;
+		queue.insert_shuffle(competitionPair.getLeft());
+		queue.insert_shuffle(competitionPair.getRight());
+		competitionPair = null;
 		fight();
 	}
 	
 	public void leftWins(){
+		Competitor left = competitionPair.getLeft(),
+				right = competitionPair.getRight();
+
 		ELO elo = new ELO(left, right);
 		elo.championWins();
 		left.setFought();
@@ -216,6 +240,9 @@ public class Competition {
 	}
 	
 	public void rightWins(){
+		Competitor left = competitionPair.getLeft(),
+				right = competitionPair.getRight();
+		
 		ELO elo = new ELO(left, right);
 		elo.challengerWins();
 		left.setFought();
@@ -225,6 +252,9 @@ public class Competition {
 	}
 	
 	public void bothWin(){
+		Competitor left = competitionPair.getLeft(),
+				right = competitionPair.getRight();
+		
 		ELO elo = new ELO(left, right);
 		elo.bothWin();
 		left.setFought();
@@ -234,6 +264,9 @@ public class Competition {
 	}
 	
 	public void bothLose(){
+		Competitor left = competitionPair.getLeft(),
+				right = competitionPair.getRight();
+		
 		ELO elo = new ELO(left, right);
 		elo.bothLose();
 		left.setFought();
@@ -243,33 +276,25 @@ public class Competition {
 	}
 	
 	public void deleteLeft(){
+		Competitor left = competitionPair.getLeft();
 		toDelete.add(left.getImage());
-		left = queue.pop();
-		try {
-			gui.battle(left, right);
-		} catch (IOException e) {
-			cancel();
-			return;
-		}
-		gui.setMainProgressMaximum(queue.size());
+		skip();
 	}
 	
 	public void deleteRight(){
+		Competitor right = competitionPair.getRight();
 		toDelete.add(right.getImage());
-		right = queue.pop();
-		try {
-			gui.battle(left, right);
-		} catch (IOException e) {
-			cancel();
-			return;
-		}
-		gui.setMainProgressMaximum(queue.size());
+		skip();
 	}
 	
 	public void commit(){
 		gui.setPause(true);
-		queue.push(left);
-		queue.push(right);
+		queue.push(competitionPair.getLeft());
+		queue.push(competitionPair.getRight());
+		
+		competitionPair = null;
+		nextCompetitionPair = null;
+		
 		int howMany = queue.size() / 3;
 		List<Competitor> best = queue.getBest(howMany);
 		List<Competitor> worst = queue.getWorst(howMany);

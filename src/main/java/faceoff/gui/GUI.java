@@ -22,10 +22,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
-import org.imgscalr.Scalr;
-
 import faceoff.competition.Competition;
-import faceoff.competition.Competitor;
+import faceoff.competition.CompetitionPair;
 
 public class GUI {
 
@@ -35,7 +33,7 @@ public class GUI {
 	private ImageIcon leftImageIcon, rightImageIcon;
 	private JProgressBar mainProgressBar;
 	private List<JButton> buttons;
-	private JPanel imagesPanel;
+	public JPanel imagesPanel;
 
 	/**
 	 * Create the application.
@@ -348,7 +346,7 @@ public class GUI {
 		});
 	}
 	
-	public void battle(Competitor left, Competitor right) throws IOException{
+	public void battle(CompetitionPair competitionPair) throws IOException{
 		if (null != leftImageIcon && null != leftImageIcon.getImage()){
 			leftImageIcon.getImage().flush();
 		}
@@ -357,48 +355,16 @@ public class GUI {
 			rightImageIcon.getImage().flush();
 		}
 
-		BufferedImage leftImage = left.lazyLoadImage(),
-			rightImage = right.lazyLoadImage(),
-			leftImageScaled,
-			rightImageScaled;
-
-		double widthViewport = imagesPanel.getWidth(),
-			heightViewport = imagesPanel.getHeight(),
+		BufferedImage leftImageScaled = competitionPair.getLeftImageScaled(),
+				rightImageScaled = competitionPair.getRightImageScaled();
 		
-			widthLeft = left.getWidth(),
-			heightLeft = left.getHeight(),
-			
-			widthRight = right.getWidth(),
-			heightRight = right.getHeight();
-		
-		double ratioLeft = (heightRight * widthViewport) / (heightLeft * widthRight + heightRight * widthLeft),
-			ratioRight = (heightLeft * ratioLeft) / heightRight;
-		
-		if (ratioLeft >= 1.0){
-			leftImageScaled = leftImage;
-		} else {
-			ratioLeft = Math.min(ratioLeft, heightViewport / heightLeft);
-			int widthLeftScaled = (int)(widthLeft * ratioLeft),
-				heightLeftScaled = (int)(heightLeft * ratioLeft);
-			leftImageScaled = Scalr.resize(leftImage, widthLeftScaled, heightLeftScaled);
-		}
-		
-		if (ratioRight >= 1.0){
-			rightImageScaled = rightImage;
-		} else {
-			ratioRight = Math.min(ratioRight,  heightViewport / heightRight);
-			
-			int widthRightScaled = (int)(widthRight * ratioRight),
-				heightRightScaled = (int)(heightRight * ratioRight);
-			rightImageScaled = Scalr.resize(rightImage, widthRightScaled, heightRightScaled);
-		}
-
-		ImageIcon tmp = new ImageIcon(leftImageScaled);
-		tmp.getImage().flush();
 		leftImageLabel.setIcon(new ImageIcon(leftImageScaled));
-		leftImageTitle.setText(left.toString());
+		leftImageTitle.setText(competitionPair.getLeft().toString());
 		rightImageLabel.setIcon(new ImageIcon(rightImageScaled));
-		rightImageTitle.setText(right.toString());
+		rightImageTitle.setText(competitionPair.getRight().toString());
+		
+		imagesPanel.revalidate();
+		imagesPanel.repaint();
 	}
 	
 	public void setMainProgress(int progress){
